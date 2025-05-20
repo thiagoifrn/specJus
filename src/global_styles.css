@@ -1,0 +1,88 @@
+/* Theme and Global Styles */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
+
+:root {
+  --primary-color: #1890ff;
+  --success-color: #52c41a;
+  --warning-color: #faad14;
+  --error-color: #f5222d;
+  --heading-color: #262626;
+  --text-color: #595959;
+  --disabled-color: #bfbfbf;
+  --border-color: #d9d9d9;
+  --background-color: #f0f2f5;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--heading-color);
+  line-height: 1.35;
+}
+
+.status-pendente {
+  color: var(--warning-color);
+}
+
+.status-notificado {
+  color: var(--success-color);
+}
+
+.status-expirado {
+  color: var(--error-color);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.sidebar-menu {
+  flex: 1;
+}
+
+.content-layout {
+  padding: 24px;
+  background: var(--background-color);
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .content-layout {
+    padding: 16px;
+  }
+}
