@@ -1,0 +1,69 @@
+<nz-layout class="app-layout">
+  <nz-sider
+    class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+  >
+    <div class="sidebar-logo">
+      <a routerLink="/">
+        <h1>SpecJus</h1>
+      </a>
+    </div>
+    <ul
+      nz-menu
+      nzTheme="dark"
+      nzMode="inline"
+      [nzInlineCollapsed]="isCollapsed"
+    >
+      <li nz-menu-item nzMatchRouter routerLink="/prazos">
+        <i nz-icon nzType="calendar"></i>
+        <span>Prazos</span>
+      </li>
+      <li nz-menu-item nzMatchRouter routerLink="/notificacoes">
+        <i nz-icon nzType="notification"></i>
+        <span>Notificações</span>
+      </li>
+      <li nz-menu-item nzMatchRouter routerLink="/configuracoes">
+        <i nz-icon nzType="setting"></i>
+        <span>Configurações</span>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <i
+            nz-icon
+            class="trigger"
+            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          ></i>
+        </span>
+        <div class="header-user">
+          <a nz-dropdown [nzDropdownMenu]="menu">
+            <nz-avatar nzIcon="user"></nz-avatar>
+            <span class="username">João Silva</span>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item routerLink="/configuracoes">
+                <i nz-icon nzType="user"></i> Meu Perfil
+              </li>
+              <li nz-menu-item (click)="logout()">
+                <i nz-icon nzType="logout"></i> Sair
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

@@ -1,0 +1,12 @@
+.message-container {
+  margin-bottom: 24px;
+}
+
+h3 {
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+nz-divider {
+  margin: 16px 0 24px;
+}

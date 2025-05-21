@@ -1,0 +1,15 @@
+.search-box {
+  margin-bottom: 16px;
+}
+
+.status-pendente {
+  font-weight: 500;
+}
+
+.status-notificado {
+  font-weight: 500;
+}
+
+.status-expirado {
+  font-weight: 500;
+}

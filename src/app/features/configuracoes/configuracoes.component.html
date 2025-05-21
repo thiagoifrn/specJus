@@ -1,0 +1,117 @@
+<nz-page-header
+  class="page-header"
+  nzTitle="Configurações"
+  nzSubtitle="Configurações de perfil e notificações"
+>
+</nz-page-header>
+
+<nz-card [nzBordered]="false">
+  <h3>Informações Pessoais</h3>
+  <nz-divider></nz-divider>
+
+  <nz-spin [nzSpinning]="loading">
+    <form [formGroup]="configForm" (ngSubmit)="onSubmit()">
+      <div *ngIf="successMessage" class="message-container">
+        <nz-alert
+          nzType="success"
+          [nzMessage]="successMessage"
+          nzShowIcon
+        ></nz-alert>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24" [nzMd]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Nome Completo</nz-form-label>
+            <nz-form-control nzErrorTip="Por favor, informe seu nome completo">
+              <input
+                nz-input
+                formControlName="nome"
+                placeholder="Seu nome completo"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="24" [nzMd]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>CPF ou OAB</nz-form-label>
+            <nz-form-control nzErrorTip="Por favor, informe seu CPF ou OAB">
+              <input
+                nz-input
+                formControlName="cpfOab"
+                placeholder="CPF ou número OAB"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24" [nzMd]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>E-mail</nz-form-label>
+            <nz-form-control nzErrorTip="Por favor, informe um e-mail válido">
+              <input
+                nz-input
+                formControlName="email"
+                placeholder="seu@email.com"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="24" [nzMd]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>WhatsApp</nz-form-label>
+            <nz-form-control
+              nzErrorTip="Por favor, informe seu número de WhatsApp"
+            >
+              <input
+                nz-input
+                formControlName="whatsapp"
+                placeholder="(DDD) 99999-9999"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <h3>Preferências de Notificação</h3>
+      <nz-divider></nz-divider>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>Canal Preferencial</nz-form-label>
+            <nz-form-control
+              nzErrorTip="Por favor, selecione o canal preferencial"
+            >
+              <nz-select
+                formControlName="canalPreferencial"
+                nzPlaceHolder="Selecione o canal preferencial"
+              >
+                <nz-option nzValue="Email" nzLabel="E-mail"></nz-option>
+                <nz-option nzValue="WhatsApp" nzLabel="WhatsApp"></nz-option>
+                <nz-option nzValue="SMS" nzLabel="SMS"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row>
+        <div nz-col [nzSpan]="24" style="text-align: right">
+          <button
+            nz-button
+            nzType="primary"
+            [disabled]="configForm.invalid || saving"
+          >
+            <i *ngIf="saving" nz-icon nzType="loading"></i>
+            <span>Salvar Configurações</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

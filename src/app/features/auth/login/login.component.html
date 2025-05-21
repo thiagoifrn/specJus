@@ -1,0 +1,68 @@
+<div class="login-container">
+  <div class="login-content">
+    <nz-card [nzBordered]="false" class="login-card">
+      <div class="login-header">
+        <h1 class="login-title">SpecJus</h1>
+        <p class="login-subtitle">Sistema de Comunicações Judiciais</p>
+      </div>
+
+      <nz-alert
+        *ngIf="error"
+        nzType="error"
+        [nzMessage]="error"
+        nzShowIcon
+        nzCloseable
+        (nzOnClose)="clearError()"
+      ></nz-alert>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Por favor, informe seu e-mail">
+            <nz-input-group nzPrefixIcon="user">
+              <input
+                type="email"
+                nz-input
+                formControlName="email"
+                placeholder="E-mail"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Por favor, informe sua senha">
+            <nz-input-group nzPrefixIcon="lock">
+              <input
+                type="password"
+                nz-input
+                formControlName="password"
+                placeholder="Senha"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control>
+            <button
+              nz-button
+              nzType="primary"
+              nzBlock
+              [disabled]="loginForm.invalid || loading"
+            >
+              <span *ngIf="!loading">Entrar</span>
+              <span *ngIf="loading">
+                <i nz-icon nzType="loading" nzTheme="outline"></i>
+                Processando...
+              </span>
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+
+        <div class="login-info">
+          <p>Teste com: advogadoexemplo.com / senha123</p>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+</div>

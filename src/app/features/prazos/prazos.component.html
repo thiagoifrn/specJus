@@ -1,0 +1,63 @@
+<nz-page-header
+  class="page-header"
+  nzTitle="Prazos Processuais"
+  nzSubtitle="Acompanhe todas as suas comunicações judiciais"
+>
+  <nz-page-header-extra>
+    <button (click)="loadData()" nz-button nzType="primary">
+      <i nz-icon nzType="sync"></i>
+      Atualizar
+    </button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div class="search-box">
+  <nz-input-group [nzSuffix]="suffixIconSearch">
+    <input
+      type="text"
+      nz-input
+      placeholder="Buscar por número de processo ou assunto"
+      [(ngModel)]="searchText"
+      (ngModelChange)="search()"
+    />
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
+  </ng-template>
+</div>
+
+<nz-spin [nzSpinning]="loading">
+  <nz-table
+    #basicTable
+    [nzData]="listOfDisplayData"
+    [nzShowPagination]="true"
+    [nzPageSize]="5"
+    nzBordered
+  >
+    <thead>
+      <tr>
+        <th nzWidth="220px">Número do Processo</th>
+        <th>Assunto</th>
+        <th nzWidth="130px">Data de Disponibilização</th>
+        <th nzWidth="130px">Prazo Final</th>
+        <th nzWidth="100px">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.numeroProcesso }}</td>
+        <td>{{ data.assunto }}</td>
+        <td>{{ data.dataDisponibilizacao | date : "dd/MM/yyyy" }}</td>
+        <td>{{ data.prazoFinal | date : "dd/MM/yyyy" }}</td>
+        <td>
+          <nz-tag
+            [nzColor]="getStatusColor(data.status)"
+            [ngClass]="'status-' + data.status.toLowerCase()"
+          >
+            {{ data.status }}
+          </nz-tag>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-spin>

@@ -1,0 +1,37 @@
+<nz-page-header
+  class="page-header"
+  nzTitle="Histórico de Notificações"
+  nzSubtitle="Acompanhe todas as notificações enviadas"
+>
+</nz-page-header>
+
+<nz-spin [nzSpinning]="loading">
+  <nz-table #basicTable [nzData]="listOfData" nzBordered>
+    <thead>
+      <tr>
+        <th nzWidth="220px">Número do Processo</th>
+        <th>Assunto</th>
+        <th nzWidth="120px">Canal</th>
+        <th nzWidth="160px">Data de Envio</th>
+        <th nzWidth="100px">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.numeroProcesso }}</td>
+        <td>{{ data.assunto }}</td>
+        <td>
+          <nz-tag [nzColor]="getCanalColor(data.canal)">
+            {{ data.canal }}
+          </nz-tag>
+        </td>
+        <td>{{ data.dataEnvio | date : "dd/MM/yyyy HH:mm" }}</td>
+        <td>
+          <nz-tag [nzColor]="data.status === 'Enviado' ? 'success' : 'error'">
+            {{ data.status }}
+          </nz-tag>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-spin>
