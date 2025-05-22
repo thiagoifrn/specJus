@@ -1,8 +1,11 @@
 export interface Comunicacao {
-  id: string;
+  id: number;
   numeroProcesso: string;
-  assunto: string;
+  tipoComunicacao: string;
   dataDisponibilizacao: Date;
   prazoFinal: Date;
-  status: 'Pendente' | 'Notificado' | 'Expirado';
+  status: "Pendente" | "Notificado" | "Expirado";
+  texto: string;
+  link: string;
+  nomeOrgao: string;
 }

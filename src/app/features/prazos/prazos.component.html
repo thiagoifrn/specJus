@@ -4,7 +4,7 @@
   nzSubtitle="Acompanhe todas as suas comunicações judiciais"
 >
   <nz-page-header-extra>
-    <button (click)="loadData()" nz-button nzType="primary">
+    <button (click)="loadComunication()" nz-button nzType="primary">
       <i nz-icon nzType="sync"></i>
       Atualizar
     </button>
@@ -41,12 +41,13 @@
         <th nzWidth="130px">Data de Disponibilização</th>
         <th nzWidth="130px">Prazo Final</th>
         <th nzWidth="100px">Status</th>
+        <th nzWidth="100px">Link</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let data of basicTable.data">
         <td>{{ data.numeroProcesso }}</td>
-        <td>{{ data.assunto }}</td>
+        <td>{{ data.tipoComunicacao }}</td>
         <td>{{ data.dataDisponibilizacao | date : "dd/MM/yyyy" }}</td>
         <td>{{ data.prazoFinal | date : "dd/MM/yyyy" }}</td>
         <td>
@@ -57,6 +58,7 @@
             {{ data.status }}
           </nz-tag>
         </td>
+        <td><a href="{{ data.link }}" target="_blank">PDF</a></td>
       </tr>
     </tbody>
   </nz-table>

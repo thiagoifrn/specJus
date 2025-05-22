@@ -43,20 +43,19 @@ export class PrazosComponent implements OnInit {
   constructor(private comunicacaoService: ComunicacaoService) {}
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadComunication();
   }
 
-  loadData(): void {
-    console.log("chamou Api prazos");
+  loadComunication() {
     this.loading = true;
-    this.comunicacaoService.getAll().subscribe({
+    this.comunicacaoService.getComunicacoes().subscribe({
       next: (data) => {
         this.listOfData = data;
         this.listOfDisplayData = [...this.listOfData];
         this.loading = false;
       },
       error: (err) => {
-        console.error("Erro ao carregar comunicações:", err);
+        console.error("A pesquisa do pje está passando por manutenção.:", err);
         this.loading = false;
       },
     });
@@ -67,7 +66,7 @@ export class PrazosComponent implements OnInit {
     this.listOfDisplayData = this.listOfData.filter(
       (data) =>
         data.numeroProcesso.toLowerCase().includes(searchTerm) ||
-        data.assunto.toLowerCase().includes(searchTerm)
+        data.tipoComunicacao.toLowerCase().includes(searchTerm)
     );
   }
 

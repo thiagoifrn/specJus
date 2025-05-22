@@ -1,73 +1,82 @@
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { delay } from "rxjs/operators";
+import { delay, map } from "rxjs/operators";
 import { Comunicacao } from "../models/comunicacao.model";
+import { addBusinessDays, isBefore, isToday, isTomorrow } from "date-fns";
+import { HttpClient } from "@angular/common/http";
+
+interface ComunicaApiResponse {
+  count: number;
+  items: any[];
+  message: string;
+  status: string;
+}
 
 @Injectable({
   providedIn: "root",
 })
 export class ComunicacaoService {
-  private mockData: Comunicacao[] = [
-    {
-      id: "1",
-      numeroProcesso: "0123456-78.2023.8.26.0100",
-      assunto: "Intimação para Audiência",
-      dataDisponibilizacao: new Date(2023, 9, 15),
-      prazoFinal: new Date(2023, 9, 25),
-      status: "Pendente",
-    },
-    {
-      id: "2",
-      numeroProcesso: "0987654-32.2023.8.26.0100",
-      assunto: "Despacho Inicial",
-      dataDisponibilizacao: new Date(2023, 9, 10),
-      prazoFinal: new Date(2023, 9, 20),
-      status: "Notificado",
-    },
-    {
-      id: "3",
-      numeroProcesso: "0234567-89.2023.8.26.0100",
-      assunto: "Citação",
-      dataDisponibilizacao: new Date(2023, 8, 20),
-      prazoFinal: new Date(2023, 9, 5),
-      status: "Expirado",
-    },
-    {
-      id: "4",
-      numeroProcesso: "0345678-90.2023.8.26.0100",
-      assunto: "Sentença",
-      dataDisponibilizacao: new Date(2023, 9, 18),
-      prazoFinal: new Date(2023, 10, 2),
-      status: "Pendente",
-    },
-    {
-      id: "5",
-      numeroProcesso: "0456789-01.2023.8.26.0100",
-      assunto: "Recurso de Apelação",
-      dataDisponibilizacao: new Date(2023, 9, 12),
-      prazoFinal: new Date(2023, 9, 27),
-      status: "Notificado",
-    },
-    {
-      id: "6",
-      numeroProcesso: "0456789-01.2024.8.26.0100",
-      assunto: "Recurso de Apelação",
-      dataDisponibilizacao: new Date(2025, 4, 25),
-      prazoFinal: new Date(2025, 5, 8),
-      status: "Pendente",
-    },
-  ];
+  private mockData: Comunicacao[] = [];
+  private API_URL =
+    "https://comunicaapi.pje.jus.br/api/v1/comunicacao?numeroOab=21604&ufOab=RN&nomeAdvogado=RAULISSON%20BRUNO%20XAVIER%20DA%20SILVA";
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Comunicacao[]> {
-    return of(this.mockData).pipe(delay(800));
+  getComunicacoes(): Observable<Comunicacao[]> {
+    return this.http.get<ComunicaApiResponse>(this.API_URL).pipe(
+      map((response) =>
+        response.items.map((c) => {
+          const dataDisponibilizacao = new Date(c.data_disponibilizacao);
+          const prazoFinal = this.calcularPrazo(dataDisponibilizacao);
+          const hoje = new Date();
+          const status =
+            isBefore(prazoFinal, hoje) && c.status !== "N"
+              ? "Expirado"
+              : c.status === "N"
+              ? "Notificado"
+              : "Pendente";
+
+          const comunicacao: Comunicacao = {
+            id: c.id,
+            numeroProcesso: c.numero_processo,
+            tipoComunicacao: c.tipoComunicacao,
+            dataDisponibilizacao,
+            prazoFinal,
+            status,
+            texto: c.texto,
+            link: c.link,
+            nomeOrgao: c.nomeOrgao,
+          };
+
+          return comunicacao;
+        })
+      )
+    );
   }
 
-  getById(id: string): Observable<Comunicacao | undefined> {
-    const comunicacao = this.mockData.find((item) => item.id === id);
-    return of(comunicacao).pipe(delay(500));
+  private calcularPrazo(data: Date): Date {
+    return addBusinessDays(data, 15);
   }
 
-  // Additional methods for the real API integration would be added here
+  getPorStatus(
+    status: "Pendente" | "Notificado" | "Expirado"
+  ): Observable<Comunicacao[]> {
+    return this.getComunicacoes().pipe(
+      map((comunicacoes) => comunicacoes.filter((c) => c.status === status))
+    );
+  }
+
+  getVencemHoje(): Observable<Comunicacao[]> {
+    return this.getComunicacoes().pipe(
+      map((comunicacoes) => comunicacoes.filter((c) => isToday(c.prazoFinal)))
+    );
+  }
+
+  getVencemAmanha(): Observable<Comunicacao[]> {
+    return this.getComunicacoes().pipe(
+      map((comunicacoes) =>
+        comunicacoes.filter((c) => isTomorrow(c.prazoFinal))
+      )
+    );
+  }
 }

@@ -1,22 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { Usuario } from '../models/usuario.model';
+import { Injectable } from "@angular/core";
+import { Observable, of } from "rxjs";
+import { delay } from "rxjs/operators";
+import { Usuario } from "../models/usuario.model";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UsuarioService {
   private mockData: Usuario = {
-    id: '1',
-    nome: 'João Silva',
-    cpfOab: 'OAB/SP 123456',
-    email: 'advogado@exemplo.com',
-    whatsapp: '(11) 99999-9999',
-    canalPreferencial: 'Email'
+    id: "1",
+    nome: "Raulisson Bruno Xavier da Silva",
+    cpfOab: "OAB/RN 21604",
+    email: "advogado@exemplo.com",
+    whatsapp: "(84) 98852-5237",
+    canalPreferencial: "WhatsApp",
   };
 
-  constructor() { }
+  constructor() {}
 
   getPerfil(): Observable<Usuario> {
     return of(this.mockData).pipe(delay(800));
