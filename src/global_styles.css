@@ -46,7 +46,7 @@ h6 {
 }
 
 .ant-layout {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .ant-layout-sider-children {
@@ -75,11 +75,9 @@ h6 {
   padding: 24px;
   background: var(--background-color);
 }
-
-.page-header {
-  margin-bottom: 24px;
+.ant-page-header {
+  padding: 4px 0px;
 }
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .content-layout {

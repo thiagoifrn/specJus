@@ -4,7 +4,6 @@ import { FormsModule } from "@angular/forms";
 import { ComunicacaoService } from "../../core/services/comunicacao.service";
 import { Comunicacao } from "../../core/models/comunicacao.model";
 
-// Import ng-zorro components
 import { NzTableModule } from "ng-zorro-antd/table";
 import { NzDividerModule } from "ng-zorro-antd/divider";
 import { NzTagModule } from "ng-zorro-antd/tag";
@@ -14,6 +13,9 @@ import { NzIconModule } from "ng-zorro-antd/icon";
 import { NzInputModule } from "ng-zorro-antd/input";
 import { NzPageHeaderModule } from "ng-zorro-antd/page-header";
 import { NzAlertModule } from "ng-zorro-antd/alert";
+import { NzPaginationModule } from "ng-zorro-antd/pagination";
+
+type Status = "Pendente" | "Notificado" | "Expirado";
 
 @Component({
   selector: "app-prazos",
@@ -30,6 +32,7 @@ import { NzAlertModule } from "ng-zorro-antd/alert";
     NzInputModule,
     NzPageHeaderModule,
     NzAlertModule,
+    NzPaginationModule,
   ],
   templateUrl: "./prazos.component.html",
   styleUrl: "./prazos.component.css",
@@ -37,8 +40,13 @@ import { NzAlertModule } from "ng-zorro-antd/alert";
 export class PrazosComponent implements OnInit {
   listOfData: Comunicacao[] = [];
   listOfDisplayData: Comunicacao[] = [];
+  pagedData: Comunicacao[] = [];
+
   loading = true;
   searchText = "";
+
+  pageIndex = 1;
+  pageSize = 5;
 
   constructor(private comunicacaoService: ComunicacaoService) {}
 
@@ -51,11 +59,11 @@ export class PrazosComponent implements OnInit {
     this.comunicacaoService.getComunicacoes().subscribe({
       next: (data) => {
         this.listOfData = data;
-        this.listOfDisplayData = [...this.listOfData];
+        this.search(); // aplica filtro e paginação inicial
         this.loading = false;
       },
       error: (err) => {
-        console.error("A pesquisa do pje está passando por manutenção.:", err);
+        console.error("Erro ao carregar comunicações:", err);
         this.loading = false;
       },
     });
@@ -68,18 +76,27 @@ export class PrazosComponent implements OnInit {
         data.numeroProcesso.toLowerCase().includes(searchTerm) ||
         data.tipoComunicacao.toLowerCase().includes(searchTerm)
     );
+    this.pageIndex = 1;
+    this.updatePagedData();
   }
 
-  getStatusColor(status: string): string {
-    switch (status) {
-      case "Pendente":
-        return "warning";
-      case "Notificado":
-        return "success";
-      case "Expirado":
-        return "error";
-      default:
-        return "default";
-    }
+  onPageChange(index: number): void {
+    this.pageIndex = index;
+    this.updatePagedData();
+  }
+
+  updatePagedData(): void {
+    const start = (this.pageIndex - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedData = this.listOfDisplayData.slice(start, end);
+  }
+
+  getStatusColor(status: Status): string {
+    const color = {
+      Pendente: "warning",
+      Notificado: "success",
+      Expirado: "error",
+    };
+    return color[status] || "default";
   }
 }
